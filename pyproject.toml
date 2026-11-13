@@ -1,0 +1,73 @@
+[project]
+name = "milan-cdr"
+version = "0.1.0"
+description = "Carga y análisis con MongoDB de los CDR de Milán (Telecom Italia Big Data Challenge)"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "babel>=2.18.0",
+    "httpx>=0.28.1",
+    "kaleido>=1.5.1",
+    "numpy>=2.5.4",
+    "phonenumbers>=9.0.43",
+    "plotly>=7.1.0",
+    "pymongo>=4.19.0",
+    "typer>=0.29.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.5",
+    "ty>=0.0.101",
+]
+
+[project.scripts]
+milan-cdr = "milan_cdr.cli:app"
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "B", "UP", "SIM", "C4", "PT", "RUF", "N", "D", "PL", "PTH", "RET", "ARG", "TC", "PERF",
+]
+ignore = [
+    "D203", "D213",        # estilo de docstrings incompatible con D211/D212
+    "D105", "D107",        # métodos mágicos / __init__
+    "PLR0913",             # funciones con muchos argumentos (CLI)
+    "PLR2004",             # constantes "mágicas" en tests y umbrales
+    "RUF001", "RUF002", "RUF003",  # caracteres unicode ambiguos (texto en español)
+    "TC001", "TC002", "TC003",     # imports solo de tipos: se prefiere claridad
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "PLR2004", "ARG", "PLC0415"]
+# Imports perezosos en la CLI: `milan-cdr --help` no carga pymongo ni matplotlib.
+"src/milan_cdr/cli.py" = ["PLC0415"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ty.environment]
+python-version = "3.14"
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+pythonpath = ["tests"]
+addopts = ["--doctest-modules", "--import-mode=importlib", "-ra"]
+markers = ["mongo: tests de integración que necesitan un servidor MongoDB"]
+
+[tool.coverage.run]
+source = ["milan_cdr"]
+branch = true
