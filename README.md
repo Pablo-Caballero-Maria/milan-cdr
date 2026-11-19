@@ -6,6 +6,9 @@ publicados por Telecom Italia en el *Big Data Challenge* (dataset
 
 Semana analizada: **lunes 2 a domingo 8 de diciembre de 2013** (36.362.524 registros).
 
+La memoria, con las consultas y los resultados de cada apartado, está en
+[CDRMilan.pdf](CDRMilan.pdf).
+
 ## Requisitos
 
 - Python 3.14 y [uv](https://docs.astral.sh/uv/)
