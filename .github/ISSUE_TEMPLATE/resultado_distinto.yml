@@ -1,0 +1,26 @@
+name: "Un resultado no coincide con la memoria"
+description: "Una cifra, tabla o figura distinta de la de CDRMilan.pdf o results/."
+title: "[Resultado] "
+labels: ["question"]
+body:
+  - type: input
+    id: apartado
+    attributes:
+      label: "Apartado"
+      placeholder: "p. ej. apartado 5 (series semanales)"
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: "Qué dice la memoria o results/"
+      placeholder: ""
+    validations:
+      required: true
+  - type: textarea
+    id: obtenido
+    attributes:
+      label: "Qué obtienes tú (y el comando)"
+      placeholder: "uv run milan-cdr run 5 → …"
+    validations:
+      required: true

@@ -1,0 +1,48 @@
+# Registro de cambios
+
+Todos los cambios relevantes de milan-cdr se anotan aquí. El formato sigue
+[Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa
+[versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`vX.Y.Z`) en el
+repositorio.
+
+## [Sin publicar]
+
+## [1.0.0] - 2026-11-21
+
+### Añadido
+
+- Integración continua con GitHub Actions en cada *push* y *pull request*: Ruff (lint y formato), ty,
+  pytest con cobertura contra un MongoDB 8 real (resumen en cada ejecución e insignia en el README) y
+  construcción del paquete con `uv build`, comprobando que la CLI se instala y arranca.
+- Seguridad: análisis con CodeQL, Dependabot (uv y GitHub Actions), escaneo de secretos con protección
+  al hacer *push* y [política de seguridad](SECURITY.md) con avisos privados.
+- Licencia [MIT](LICENSE) para el código, [código de conducta](CODE_OF_CONDUCT.md),
+  [CITATION.cff](CITATION.cff), plantillas de *issues* (error, mejora y resultado que no coincide con la
+  memoria) y de *pull request*.
+- [Wiki](https://github.com/Pablo-Caballero-Maria/milan-cdr/wiki) con el conjunto de datos, la carga,
+  los apartados 2 a 8, los resultados y el desarrollo.
+
+### Cambiado
+
+- README reorganizado, con insignias, índice, diagramas y figuras de los resultados.
+
+## [0.2.0] - 2026-11-19
+
+### Añadido
+
+- La memoria del trabajo en PDF ([CDRMilan.pdf](CDRMilan.pdf)).
+
+## [0.1.0] - 2026-11-13
+
+### Añadido
+
+- CLI `milan-cdr` (typer): descarga desde Harvard Dataverse, carga en paralelo de los 36,4 millones de
+  registros de la semana del 2 al 8 de diciembre de 2013 (siete procesos, lotes de 20 000 documentos),
+  los apartados 2 a 8 con pipelines de agregación, el estudio de ocho celdas, las figuras con Plotly y
+  el informe en JSON y Markdown (`results/`).
+- Tests unitarios, *doctests* y de integración contra MongoDB; Ruff y ty.
+
+[Sin publicar]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/releases/tag/v0.1.0

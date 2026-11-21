@@ -1,6 +1,6 @@
 [project]
 name = "milan-cdr"
-version = "0.1.0"
+version = "1.0.0"
 description = "Carga y análisis con MongoDB de los CDR de Milán (Telecom Italia Big Data Challenge)"
 readme = "README.md"
 requires-python = ">=3.14"

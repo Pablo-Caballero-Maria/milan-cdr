@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Si usas este software, cítalo con estos metadatos."
+type: software
+title: "milan-cdr: carga y análisis con MongoDB de los CDR de Milán"
+abstract: "Carga en MongoDB de los 36,4 millones de registros de actividad móvil de Milán del Telecom Italia Big Data Challenge (semana del 2 al 8 de diciembre de 2013) y su análisis con pipelines de agregación: países, celdas, series temporales y el estudio de ocho barrios."
+authors:
+  - family-names: "Caballero María"
+    given-names: "Pablo"
+version: 1.0.0
+date-released: 2026-11-21
+license: MIT
+repository-code: "https://github.com/Pablo-Caballero-Maria/milan-cdr"
+url: "https://pablo-portfolio-woad.vercel.app/projects/milan-cdr"
+keywords:
+  - "MongoDB"
+  - "big data"
+  - "pipelines de agregación"
+  - "CDR"
+  - "Telecom Italia"
+  - "Milán"
+  - "Python"
+  - "Plotly"
