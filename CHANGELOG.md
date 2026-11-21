@@ -7,6 +7,14 @@ repositorio.
 
 ## [Sin publicar]
 
+## [1.0.1] - 2026-11-21
+
+### Cambiado
+
+- La memoria pasa a [`memoria/memoria.pdf`](memoria/memoria.pdf), como en los demás proyectos (es la
+  versión final del documento de Google Docs, idéntica a la entregada como `CDRMilan.pdf`), y el material
+  de la asignatura a [`instrucciones/`](instrucciones/) (`enunciado.pdf` y `BaseDeDatosCDRMilan.pdf`).
+
 ## [1.0.0] - 2026-11-21
 
 ### Añadido
@@ -30,7 +38,7 @@ repositorio.
 
 ### Añadido
 
-- La memoria del trabajo en PDF ([CDRMilan.pdf](CDRMilan.pdf)).
+- La memoria del trabajo en PDF (`CDRMilan.pdf`, hoy en [`memoria/memoria.pdf`](memoria/memoria.pdf)).
 
 ## [0.1.0] - 2026-11-13
 
@@ -42,7 +50,8 @@ repositorio.
   el informe en JSON y Markdown (`results/`).
 - Tests unitarios, *doctests* y de integración contra MongoDB; Ruff y ty.
 
-[Sin publicar]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.0...HEAD
+[Sin publicar]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/releases/tag/v0.1.0

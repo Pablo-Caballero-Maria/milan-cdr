@@ -1,5 +1,5 @@
 name: "Un resultado no coincide con la memoria"
-description: "Una cifra, tabla o figura distinta de la de CDRMilan.pdf o results/."
+description: "Una cifra, tabla o figura distinta de la de la memoria (memoria/memoria.pdf) o de results/."
 title: "[Resultado] "
 labels: ["question"]
 body:

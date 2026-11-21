@@ -20,7 +20,7 @@ Italia en el *Big Data Challenge*.
 ![Ruff](https://img.shields.io/badge/Ruff-lint_y_formato-D7FF64?logo=ruff&logoColor=black)
 ![pytest](https://img.shields.io/badge/pytest-74_tests-0A9EDC?logo=pytest&logoColor=white)
 
-[Memoria (PDF)](CDRMilan.pdf) ·
+[Memoria (PDF)](memoria/memoria.pdf) ·
 [Wiki](https://github.com/Pablo-Caballero-Maria/milan-cdr/wiki) ·
 [Resultados](results/informe.md) ·
 [Registro de cambios](CHANGELOG.md) ·
@@ -42,7 +42,9 @@ Inmaculada, fiesta nacional, el domingo.
 | :---: | :---: | :---: | :---: | :---: |
 | 36,4 millones | ~95 s (7 procesos) | 217 | 9.998 con datos | 8, hora a hora |
 
-La memoria, con las consultas y los resultados de cada apartado, está en [CDRMilan.pdf](CDRMilan.pdf).
+La memoria (`CDRMilan.pdf` en la entrega), con las consultas y los resultados de cada apartado, está en
+[`memoria/memoria.pdf`](memoria/memoria.pdf); el enunciado y la presentación del conjunto de datos de la
+asignatura, en [`instrucciones/`](instrucciones/).
 
 ## Índice
 
@@ -178,6 +180,8 @@ src/milan_cdr/
   cli.py         CLI `milan-cdr` (typer)
 tests/           tests unitarios + integración contra MongoDB real
 results/         informe.md, resultados.json y figuras/ (PNG + HTML interactivo)
+memoria/         la memoria del trabajo (memoria.pdf, entregada como CDRMilan.pdf)
+instrucciones/   enunciado y presentación del conjunto de datos (material de la asignatura)
 ```
 
 ## Calidad e integración continua
@@ -241,7 +245,7 @@ conjunto de datos:
   author  = {Caballero María, Pablo},
   title   = {milan-cdr: carga y análisis con MongoDB de los CDR de Milán},
   year    = {2026},
-  version = {1.0.0},
+  version = {1.0.1},
   url     = {https://github.com/Pablo-Caballero-Maria/milan-cdr},
   license = {MIT}
 }
@@ -263,4 +267,5 @@ conjunto de datos:
 - **Datos**: bajo [ODbL 1.0](http://opendatacommons.org/licenses/odbl/1-0/), "from BigDataChallenge
   contest" (Telecom Italia). Los ficheros originales no se incluyen en el repositorio; `results/`
   contiene resultados derivados de ellos.
-- `BaseDeDatosCDRMilan.pdf` y `TrabajoMilanCDR.pdf` son material de la asignatura.
+- `instrucciones/` (el enunciado y la presentación `BaseDeDatosCDRMilan.pdf`) es material de la
+  asignatura y pertenece a sus autores; no está cubierto por la licencia MIT.
