@@ -22,6 +22,7 @@ from milan_cdr import pipelines as pl
 from milan_cdr.analysis import DB, QueryResult, Row, run_pipeline
 from milan_cdr.config import STUDY_CELLS, Settings
 from milan_cdr.countries import lookup
+from milan_cdr.documents import collections
 
 #: Horas consideradas "noche" (hora local, intervalo [0, 6)).
 NIGHT_HOURS = range(6)
@@ -149,7 +150,7 @@ def run_study(db: DB, settings: Settings, cells: Mapping[int, str] = STUDY_CELLS
     q_city_profile = run_pipeline(db, hour_coll, pl.city_hourly_profile(), "Perfil horario de la ciudad")
     q_city_series = run_pipeline(db, hour_coll, pl.city_series(), "Serie horaria de la ciudad")
 
-    n_cells = max(db[cell_coll].estimated_document_count(), 1)
+    n_cells = max(collections(db, settings).cells.estimated_document_count(), 1)
     profiles = split_profiles(q_profile.rows)
     city_profiles_raw = split_profiles(q_city_profile.rows)
     city_profiles = {

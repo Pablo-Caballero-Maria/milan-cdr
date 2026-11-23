@@ -16,10 +16,13 @@ import os
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Final
+from typing import Final, Literal
+
+#: Nombre de un campo de actividad de un registro CDR.
+type ActivityField = Literal["smsin", "smsout", "callin", "callout", "internet"]
 
 #: Campos numéricos de actividad presentes en cada registro CDR.
-ACTIVITY_FIELDS: Final[tuple[str, ...]] = (
+ACTIVITY_FIELDS: Final[tuple[ActivityField, ...]] = (
     "smsin",
     "smsout",
     "callin",

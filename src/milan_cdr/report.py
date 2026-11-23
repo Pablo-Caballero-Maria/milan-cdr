@@ -21,6 +21,7 @@ from rich.table import Table
 
 from milan_cdr.analysis import DB, SECTIONS, QueryResult, Row, connect
 from milan_cdr.config import ACTIVITY_FIELDS, Settings
+from milan_cdr.documents import collections
 from milan_cdr.plots import all_study_figures
 from milan_cdr.study import StudyResult, run_study
 
@@ -216,7 +217,7 @@ def build_figures(settings: Settings) -> dict[str, Path]:
     with connect(settings) as client:
         db: DB = client[settings.db_name]
         study = run_study(db, settings)
-        cell_docs = list(db[settings.cell_collection].find({}, {"total": 1}))
+        cell_docs = list(collections(db, settings).cells.find({}, {"total": 1}))
     return all_study_figures(study, cell_docs, settings.results_dir / "figuras")
 
 
@@ -237,7 +238,7 @@ def build_report(settings: Settings) -> Path:
         console.print("Ejecutando apartado 8...")
         study = run_study(db, settings)
         console.print(rich_table("Apartado 8", study_rows(study), STUDY_COLUMNS))
-        cell_docs = list(db[settings.cell_collection].find({}, {"total": 1}))
+        cell_docs = list(collections(db, settings).cells.find({}, {"total": 1}))
 
     figures = all_study_figures(study, cell_docs, fig_dir)
 

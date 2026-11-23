@@ -24,16 +24,13 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from milan_cdr.config import ACTIVITY_FIELDS
+from milan_cdr.documents import CDRDocument
 
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 _N_COLUMNS = 3 + len(ACTIVITY_FIELDS)
 
 
-#: Documento de la colección ``Milan_CDR_c``: ``cellid`` (int), ``time``
-#: (datetime UTC), ``countrycode`` (int) y, solo si tienen valor, los campos
-#: de actividad ``smsin``, ``smsout``, ``callin``, ``callout`` e ``internet``
-#: (float).
-type CDRDocument = dict[str, int | float | datetime]
+__all__ = ["CDRDocument", "ParseError", "batched", "iter_documents", "ms_to_datetime", "parse_line", "read_file"]
 
 
 class ParseError(ValueError):
@@ -64,9 +61,18 @@ def parse_line(line: str) -> CDRDocument:
             "time": ms_to_datetime(int(parts[1])),
             "countrycode": int(parts[2]),
         }
-        for name, raw in zip(ACTIVITY_FIELDS, parts[3:], strict=True):
-            if raw:
-                doc[name] = float(raw)
+        # Los campos de actividad, en el orden de ACTIVITY_FIELDS; vacíos = no se guardan.
+        smsin, smsout, callin, callout, internet = parts[3:]
+        if smsin:
+            doc["smsin"] = float(smsin)
+        if smsout:
+            doc["smsout"] = float(smsout)
+        if callin:
+            doc["callin"] = float(callin)
+        if callout:
+            doc["callout"] = float(callout)
+        if internet:
+            doc["internet"] = float(internet)
     except ValueError as exc:
         raise ParseError(f"Valor no numérico en {line!r}") from exc
     return doc

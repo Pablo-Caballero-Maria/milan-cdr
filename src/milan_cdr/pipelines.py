@@ -12,11 +12,28 @@ etapas (``list[dict]``) sin tocar la base de datos. Esto permite:
 from __future__ import annotations
 
 from collections.abc import Iterable, Sequence
-from typing import Any
+from typing import Any, TypedDict
 
 from milan_cdr.config import ACTIVITY_FIELDS, ACTIVITY_GROUPS, GRID_SIZE, ITALY_CODE, TIMEZONE, UNKNOWN_CODE
 
-type Stage = dict[str, Any]
+#: Una expresión o un documento de MongoDB dentro de una etapa (JSON anidado).
+type Spec = dict[str, Any]
+
+# Las etapas de agregación que se usan, tipadas: cada una es un documento con una sola clave, su
+# operador (las claves empiezan por "$", de ahí la sintaxis funcional de TypedDict). Así el
+# comprobador de tipos rechaza un operador mal escrito o un valor del tipo equivocado
+# (p. ej. un $limit que no sea un entero).
+Match = TypedDict("Match", {"$match": Spec})
+Group = TypedDict("Group", {"$group": Spec})
+AddFields = TypedDict("AddFields", {"$addFields": Spec})
+Project = TypedDict("Project", {"$project": dict[str, int | str]})
+Sort = TypedDict("Sort", {"$sort": dict[str, int]})
+Limit = TypedDict("Limit", {"$limit": int})
+Facet = TypedDict("Facet", {"$facet": "dict[str, Pipeline]"})
+SetWindowFields = TypedDict("SetWindowFields", {"$setWindowFields": Spec})
+Out = TypedDict("Out", {"$out": str})
+
+type Stage = Match | Group | AddFields | Project | Sort | Limit | Facet | SetWindowFields | Out
 type Pipeline = list[Stage]
 
 #: Códigos que no se consideran "extranjero": Italia y desconocido.
@@ -26,35 +43,35 @@ NOT_FOREIGN: tuple[int, ...] = (ITALY_CODE, UNKNOWN_CODE)
 # --------------------------------------------------------------------------
 # Bloques reutilizables
 # --------------------------------------------------------------------------
-def sum_fields(fields: Sequence[str] = ACTIVITY_FIELDS) -> dict[str, Any]:
+def sum_fields(fields: Sequence[str] = ACTIVITY_FIELDS) -> Spec:
     """Acumuladores ``$sum`` de cada campo, para usar dentro de ``$group``."""
     return {f: {"$sum": f"${f}"} for f in fields}
 
 
-def add_fields(fields: Sequence[str] = ACTIVITY_FIELDS) -> dict[str, Any]:
+def add_fields(fields: Sequence[str] = ACTIVITY_FIELDS) -> Spec:
     """Expresión que suma varios campos ya agregados (``$add``)."""
     return {"$add": [f"${f}" for f in fields]}
 
 
-def record_total(fields: Sequence[str] = ACTIVITY_FIELDS) -> dict[str, Any]:
+def record_total(fields: Sequence[str] = ACTIVITY_FIELDS) -> Spec:
     """Actividad total de un registro sin agrupar (campos ausentes = 0)."""
     return {"$add": [{"$ifNull": [f"${f}", 0]} for f in fields]}
 
 
-def group_totals() -> dict[str, Any]:
+def group_totals() -> Spec:
     """Campos agregados a partir de las sumas por campo.
 
     ``sms``, ``llamadas`` e ``internet`` agrupan por tipo; ``sms_llamadas`` es
     la comunicación "persona a persona" (sin internet) y ``total`` la suma de
     los cinco campos.
     """
-    exprs: dict[str, Any] = {name: add_fields(fields) for name, fields in ACTIVITY_GROUPS.items()}
+    exprs: Spec = {name: add_fields(fields) for name, fields in ACTIVITY_GROUPS.items()}
     exprs["sms_llamadas"] = add_fields((*ACTIVITY_GROUPS["sms"], *ACTIVITY_GROUPS["llamadas"]))
     exprs["total"] = add_fields()
     return exprs
 
 
-def foreign_match(exclude: Iterable[int] = NOT_FOREIGN) -> Stage:
+def foreign_match(exclude: Iterable[int] = NOT_FOREIGN) -> Match:
     """``$match`` que se queda con los registros de países extranjeros."""
     return {"$match": {"countrycode": {"$nin": list(exclude)}}}
 
@@ -62,7 +79,7 @@ def foreign_match(exclude: Iterable[int] = NOT_FOREIGN) -> Stage:
 def ranking(
     key: str,
     *,
-    match: Stage | None = None,
+    match: Match | None = None,
     sort_by: str = "total",
     limit: int | None = None,
     count_records: bool = True,
@@ -72,7 +89,7 @@ def ranking(
     Es la base de los apartados 2, 3 y 4: solo cambian la clave de agrupación
     (país o celda), el filtro previo y el criterio de orden.
     """
-    group: Stage = {"_id": f"${key}", **sum_fields()}
+    group: Spec = {"_id": f"${key}", **sum_fields()}
     if count_records:
         group["registros"] = {"$sum": 1}
     pipeline: Pipeline = [match] if match else []
@@ -110,7 +127,7 @@ def top_cell_per_field(fields: Sequence[str] = (*ACTIVITY_FIELDS, "total"), top:
     Se agrupa una sola vez por celda y después ``$facet`` calcula en paralelo
     un ranking por cada campo sobre los 10.000 documentos resultantes.
     """
-    facets = {
+    facets: dict[str, Pipeline] = {
         f: [
             {"$sort": {f: -1, "_id": 1}},
             {"$limit": top},
@@ -216,7 +233,7 @@ def study_cells_summary(cells: Iterable[int]) -> Pipeline:
 def city_average() -> Pipeline:
     """Media y mediana por celda de cada métrica (referencia para comparar)."""
     metrics = (*ACTIVITY_FIELDS, "sms", "llamadas", "total", "total_extranjero")
-    group: Stage = {"_id": None}
+    group: Spec = {"_id": None}
     for m in metrics:
         group[f"media_{m}"] = {"$avg": f"${m}"}
         group[f"mediana_{m}"] = {"$median": {"input": f"${m}", "method": "approximate"}}

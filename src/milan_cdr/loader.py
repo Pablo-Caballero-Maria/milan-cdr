@@ -22,7 +22,8 @@ from pymongo import ASCENDING, MongoClient
 from pymongo.collection import Collection
 
 from milan_cdr.config import Settings
-from milan_cdr.parsing import CDRDocument, batched, read_file
+from milan_cdr.documents import CDRDocument, collections, typed_collection
+from milan_cdr.parsing import batched, read_file
 
 log = logging.getLogger(__name__)
 
@@ -60,7 +61,7 @@ def insert_documents(
 def _load_one(path: Path, uri: str, db_name: str, collection_name: str, batch_size: int) -> int:
     """Carga un único fichero (se ejecuta en un proceso hijo)."""
     with MongoClient(uri) as client:
-        collection: Collection[CDRDocument] = client[db_name][collection_name]
+        collection = typed_collection(client[db_name], collection_name, CDRDocument)
         count = insert_documents(collection, read_file(path), batch_size)
     log.info("%s: %d documentos", path.name, count)
     return count
@@ -81,7 +82,7 @@ def load_files(
     """Carga varios ficheros en paralelo y crea los índices al terminar."""
     start = time.perf_counter()
     with MongoClient(settings.mongo_uri) as client:
-        collection: Collection[CDRDocument] = client[settings.db_name][settings.collection]
+        collection = collections(client[settings.db_name], settings).cdr
         if drop:
             collection.drop()
 

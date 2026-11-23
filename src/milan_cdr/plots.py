@@ -24,6 +24,7 @@ import plotly.io as pio
 from plotly.subplots import make_subplots
 
 from milan_cdr.config import GRID_SIZE, TIMEZONE
+from milan_cdr.documents import CellTotal
 from milan_cdr.study import CellStudy, Profile, StudyResult
 
 # Paleta (modo claro) ------------------------------------------------------
@@ -167,7 +168,7 @@ def cell_label(cell: CellStudy) -> str:
 # --------------------------------------------------------------------------
 # Figuras
 # --------------------------------------------------------------------------
-def grid_map(cells: Sequence[dict[str, Any]], highlight: dict[int, str]) -> go.Figure:
+def grid_map(cells: Sequence[CellTotal], highlight: dict[int, str]) -> go.Figure:
     """Mapa 100x100 de la actividad total por celda (escala logarítmica)."""
     grid = np.full((GRID_SIZE, GRID_SIZE), np.nan)
     for doc in cells:
@@ -460,7 +461,7 @@ FILE_NAMES = {
 }
 
 
-def study_figures(result: StudyResult, cell_docs: Sequence[dict[str, Any]]) -> dict[str, go.Figure]:
+def study_figures(result: StudyResult, cell_docs: Sequence[CellTotal]) -> dict[str, go.Figure]:
     """Construye todas las figuras del apartado 8, por nombre."""
     highlight = {c.cellid: c.nombre for c in result.cells}
     return {
@@ -499,6 +500,6 @@ def save_figures(figures: Mapping[str, go.Figure], out_dir: Path) -> dict[str, P
     return paths
 
 
-def all_study_figures(result: StudyResult, cell_docs: Sequence[dict[str, Any]], out_dir: Path) -> dict[str, Path]:
+def all_study_figures(result: StudyResult, cell_docs: Sequence[CellTotal], out_dir: Path) -> dict[str, Path]:
     """Genera y guarda todas las figuras; devuelve las rutas PNG por nombre."""
     return save_figures(study_figures(result, cell_docs), out_dir)
