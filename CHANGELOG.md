@@ -7,6 +7,19 @@ repositorio.
 
 ## [Sin publicar]
 
+## [1.1.0] - 2026-11-22
+
+### Añadido
+
+- **Consultas tipadas**: `documents.py` declara el documento de cada colección como un `TypedDict`
+  (`CDRDocument`, con los campos de actividad opcionales; `CellDocument` y `CellHourDocument`, las colecciones de
+  los apartados 6 y 7) y da cada colección como un `Collection[...]` de PyMongo de ese tipo; cada etapa de un
+  pipeline es un `TypedDict` de su operador (`$match`, `$group`, `$facet`, `$out`…). `ty` comprueba así los
+  documentos que se insertan, los campos que se leen de los resultados (encontró que el mapa de la cuadrícula
+  recibe la proyección `{_id, total}`, ahora `CellTotal`) y los operadores de cada etapa. Los pipelines no
+  cambian: siguen siendo los mismos diccionarios que en `mongosh` y que en la memoria.
+- Tests del esquema y de las etapas (87 en total).
+
 ## [1.0.1] - 2026-11-21
 
 ### Cambiado
@@ -50,7 +63,8 @@ repositorio.
   el informe en JSON y Markdown (`results/`).
 - Tests unitarios, *doctests* y de integración contra MongoDB; Ruff y ty.
 
-[Sin publicar]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.1...HEAD
+[Sin publicar]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/Pablo-Caballero-Maria/milan-cdr/compare/v0.1.0...v0.2.0

@@ -18,7 +18,7 @@ Italia en el *Big Data Challenge*.
 ![Plotly](https://img.shields.io/badge/Plotly-figuras-3F4F75?logo=plotly&logoColor=white)
 ![uv](https://img.shields.io/badge/uv-entorno-DE5FE9?logo=uv&logoColor=white)
 ![Ruff](https://img.shields.io/badge/Ruff-lint_y_formato-D7FF64?logo=ruff&logoColor=black)
-![pytest](https://img.shields.io/badge/pytest-74_tests-0A9EDC?logo=pytest&logoColor=white)
+![pytest](https://img.shields.io/badge/pytest-87_tests-0A9EDC?logo=pytest&logoColor=white)
 
 [Memoria (PDF)](memoria/memoria.pdf) ·
 [Wiki](https://github.com/Pablo-Caballero-Maria/milan-cdr/wiki) ·
@@ -169,9 +169,11 @@ sí: tras la anonimización de Telecom Italia, un evento parece pesar alrededor 
 src/milan_cdr/
   config.py      constantes del dominio y Settings
   dataverse.py   descarga desde Harvard Dataverse (guestbook + URL firmada)
+  documents.py   esquema tipado: el TypedDict de cada colección y sus Collection[...]
   parsing.py     línea .txt -> documento (time como Date, campos vacíos omitidos)
   loader.py      carga masiva en paralelo + índices          (apartado 1)
-  pipelines.py   pipelines de agregación, funciones puras     (apartados 2-8)
+  pipelines.py   pipelines de agregación, funciones puras,    (apartados 2-8)
+                 con etapas tipadas ($match, $group, $facet…)
   analysis.py    ejecución de los apartados 2-7
   study.py       estudio de las 8 celdas                      (apartado 8)
   countries.py   prefijo telefónico -> país (phonenumbers + CLDR)
@@ -183,6 +185,12 @@ results/         informe.md, resultados.json y figuras/ (PNG + HTML interactivo)
 memoria/         la memoria del trabajo (memoria.pdf, entregada como CDRMilan.pdf)
 instrucciones/   enunciado y presentación del conjunto de datos (material de la asignatura)
 ```
+
+Las consultas están tipadas: cada colección (`Milan_CDR_c`, `Milan_CDR_celdas` y `Milan_CDR_celda_hora`) se usa
+como un `Collection[...]` de PyMongo con el `TypedDict` de su documento (`documents.py`), y cada etapa de un
+pipeline es un `TypedDict` de su operador, de modo que `ty` comprueba los documentos que se insertan, los campos
+que se leen de los resultados y que ninguna etapa lleve un operador mal escrito. Los pipelines siguen siendo los
+mismos diccionarios que en `mongosh`.
 
 ## Calidad e integración continua
 
