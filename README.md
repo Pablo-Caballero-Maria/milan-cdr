@@ -24,7 +24,7 @@ Italia en el *Big Data Challenge*.
 [Wiki](https://github.com/Pablo-Caballero-Maria/milan-cdr/wiki) ·
 [Resultados](results/informe.md) ·
 [Registro de cambios](CHANGELOG.md) ·
-[Resumen en mi portfolio](https://pablo-portfolio-woad.vercel.app/projects/milan-cdr)
+[Resumen en mi portfolio](https://pablo-caballero.vercel.app/projects/milan-cdr)
 
 <img src="results/figuras/mapa_celdas.png" alt="Mapa de calor de la actividad total de cada celda de la cuadrícula de Milán, en escala logarítmica, con las ocho celdas estudiadas señaladas" width="620">
 
